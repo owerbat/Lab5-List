@@ -41,10 +41,18 @@ public:
 		pCurr = pCurr->pNext;
 		pos++;
 	}
-	bool IsEnd() { return (pFirst == pStop); }
+	bool IsEnd() { 
+		return (pCurr == pStop); 
+	}
 
 	void DelFirst();
 	void DelCurrent();
+	void DelLast();
+
+	TLink<T> *GetCurr();
+	TLink<T> *GetPrev();
+	TLink<T> *GetFirst();
+	TLink<T> *GetLast();
 };
 
 template <class T>
@@ -57,11 +65,16 @@ TList<T>::TList() {
 template <class T>
 TList<T>::~TList() {
 	// for(...) delFirst()
+	//for (Reset(); !IsEnd(); GoNext())
+	while(size != 0)
+		DelFirst();
 }
 
 template <class T>
 void TList<T>::setPos(const int _pos) {
 	// for(...) GoNext()
+	for (int i = 0; i < _pos; i++)
+		GoNext();
 }
 
 template <class T>
@@ -71,6 +84,7 @@ void TList<T>::insFirst(const T& elem) {
 	tmp->pNext = pFirst;
 	if (pFirst == pStop) {
 		pFirst = pLast = pCurr = tmp;
+		//pFirst = pLast = pPrev = pCurr = tmp;
 		pos = 0;
 	}
 	else {
@@ -87,6 +101,7 @@ void TList<T>::insLast(const T& elem) {
 	tmp->pNext = pStop;
 	if (pFirst == pStop) {
 		pFirst = pLast = pCurr = tmp;
+		//pFirst = pLast = pPrev = pCurr = tmp;
 		pos = 0;
 	}
 	else {
@@ -122,7 +137,7 @@ void TList<T>::DelFirst() {
 		pos = -1;
 	}
 	else {
-		tmp = pFirst;
+		TLink<T> *tmp = pFirst;
 		pFirst = pFirst->pNext;
 		delete tmp;
 		pos--;
@@ -136,6 +151,48 @@ void TList<T>::DelCurrent() {
 		DelFirst();
 	}
 	else {
-
+		TLink<T> *tmp = pCurr;
+		pCurr = pCurr->pNext;
+		pPrev->pNext = pCurr;
+		delete tmp;
+		size--;
 	}
+}
+
+template <class T>
+void TList<T>::DelLast() {
+	if (size == 1) {
+		DelFirst();
+	}
+	else {
+		Reset();
+		for (int i = 0; i < size - 1; i++) {
+			GoNext();
+		}
+		TLink<T> *tmp = pLast;
+		pCurr->pNext = pStop;
+		pLast = pCurr;
+		delete tmp;
+		size--;
+	}
+}
+
+template <class T>
+TLink<T> *TList<T>::GetCurr() {
+	return pCurr;
+}
+
+template <class T>
+TLink<T> *TList<T>::GetPrev() {
+	return pPrev;
+}
+
+template <class T>
+TLink<T> *TList<T>::GetFirst() {
+	return pFirst;
+}
+
+template <class T>
+TLink<T> *TList<T>::GetLast() {
+	return pLast;
 }
