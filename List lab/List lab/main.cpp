@@ -1,5 +1,5 @@
-#include "TList.h"
 #include <time.h>
+#include "Polinom.h"
 
 int main() {
 	/*cout << "Count of elements: ";
@@ -60,8 +60,19 @@ int main() {
 	*/
 
 
-	THeadList<int> a;
+	TMonom m1;
+	m1.coeff = 2;
+	m1.degX = 7;
+	m1.degY = 3;
+	m1.degZ = 6;
 
+	TMonom m2;
+	m2.coeff = 2;
+	m2.degX = 7;
+	m2.degY = 3;
+	m2.degZ = 6;
+
+	cout << operator==(m1, m2) << endl;
 
 	return 0;
 }
