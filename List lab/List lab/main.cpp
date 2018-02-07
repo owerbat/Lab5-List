@@ -1,7 +1,8 @@
 #include "TList.h"
+#include <time.h>
 
 int main() {
-	cout << "Count of elements: ";
+	/*cout << "Count of elements: ";
 	int count = 0;
 	cin >> count;
 
@@ -11,6 +12,7 @@ int main() {
 
 	int FirstEl;
 	cin >> FirstEl;
+
 	list.insFirst(FirstEl);
 
 	for (int i = 1; i < count; i++) {
@@ -35,7 +37,31 @@ int main() {
 	for (list.Reset(); !list.IsEnd(); list.GoNext()) {
 		cout << list.GetCurr()->val << " ";
 	}
-	cout << endl;
+	cout << endl;*/
+
+	/*
+	srand(time(NULL));
+
+	cout << "Count of elements: ";
+	int count = 0;
+	cin >> count;
+
+	TList<int> list;
+
+	for (int i = 0; i < count; i++) {
+		list.insFirst(rand() % 100);
+	}
+
+	TList<int> SortList;
+
+	for (SortList.Reset(); !SortList.IsEnd(); SortList.GoNext()) {
+		cout << SortList.GetCurr()->val << " ";
+	}
+	*/
+
+
+	THeadList<int> a;
+
 
 	return 0;
 }

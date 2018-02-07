@@ -12,6 +12,7 @@ struct TLink{
 
 template <class T>
 class TList {
+protected:
 	TLink<T> *pFirst;
 	TLink<T> *pPrev;
 	TLink<T> *pCurr;
@@ -53,6 +54,8 @@ public:
 	TLink<T> *GetPrev();
 	TLink<T> *GetFirst();
 	TLink<T> *GetLast();
+
+	//TList<T> sort();
 };
 
 template <class T>
@@ -195,4 +198,68 @@ TLink<T> *TList<T>::GetFirst() {
 template <class T>
 TLink<T> *TList<T>::GetLast() {
 	return pLast;
+}
+
+/*template <class T>
+TList<T> TList<T>::sort() {
+	TList<T> res;
+
+	for (Reset(); !IsEnd(); GoNext()) {
+		res.Reset();
+
+		if (res.getSize() == 0) {
+			res.insFirst(pCurr->val);
+		}
+		else if (pCurr->val <= res.getFirst()->val) {
+			res.insFirst(pCurr->val);
+		}
+		else if (pCurr->val >= res.getLast()->val) {
+			res.insLast(pCurr->val);
+		}
+		else {
+			while (pCurr->val > (res.getCurr()->val)) {
+				res.GoNext();
+			}
+			res.insCurrent(pCurr->val);
+		}
+
+		return res;
+	}
+}*/
+
+template <class T>
+class THeadList : public TList<T> {
+protected:
+	TLink<T> *pHead;
+public:
+	THeadList();
+	~THeadList();
+
+	void insFirst(const T& elem);
+	void DelFirst();
+};
+
+template <class T>
+THeadList<T>::THeadList() : TList() {
+	pHead = new TLink<T>;
+	pStop = pHead;
+	pHead->pNext = pHead;
+}
+
+template <class T>
+THeadList<T>::~THeadList() {
+	TList::~TList();
+	delete pHead;
+}
+
+template <class T>
+void THeadList<T>::insFirst(const T& elem) {
+	TList::insFirst(elem);
+	pHead->pNext = pFirst;
+}
+
+template <class T>
+void THeadList<T>::DelFirst() {
+	TList::DelFirst();
+	pHead->pNext = pFirst;
 }
