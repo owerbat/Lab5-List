@@ -58,6 +58,11 @@ public:
 	//TList<T> sort();
 };
 
+
+
+
+
+
 template <class T>
 TList<T>::TList() {
 	pFirst = pLast = pPrev = pCurr = pStop = NULL;
@@ -227,6 +232,12 @@ TList<T> TList<T>::sort() {
 	}
 }*/
 
+
+
+
+
+
+
 template <class T>
 class THeadList : public TList<T> {
 protected:
@@ -238,6 +249,12 @@ public:
 	void insFirst(const T& elem);
 	void DelFirst();
 };
+
+
+
+
+
+
 
 template <class T>
 THeadList<T>::THeadList() : TList() {
