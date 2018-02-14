@@ -60,25 +60,29 @@ int main() {
 	*/
 
 
-	TMonom m1;
+	/*TMonom m1;
 	m1.coeff = 2;
 	m1.degX = 7;
 	m1.degY = 3;
 	m1.degZ = 6;
 
 	TMonom m2;
-	m2.coeff = 3;
+	m2.coeff = 2;
 	m2.degX = 7;
 	m2.degY = 3;
 	m2.degZ = 6;
 
-	try {
+	cout << operator>(m1, m2) << endl;*/
+
+	/*try {
 		TMonom res = m1 / m2;
 		cout << res.degX << "; " << res.degY << "; " << res.degZ << "; " << res.coeff << endl;
 	}
 	catch (char *str) {
 		cout << str << endl;
-	}
+	}*/
+
+	TPolinom p;
 
 	return 0;
 }

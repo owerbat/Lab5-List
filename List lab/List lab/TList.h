@@ -28,9 +28,9 @@ public:
 	int getPos() { return pos; }
 	void setPos(const int _pos);
 
-	void insFirst(const T& elem);
+	virtual void insFirst(const T& elem);
 	void insLast(const T& elem);
-	void insCurrent(const T& elem);
+	virtual void insCurrent(const T& elem);
 
 	void Reset() {
 		pCurr = pFirst;
