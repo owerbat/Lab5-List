@@ -29,7 +29,7 @@ public:
 	void setPos(const int _pos);
 
 	virtual void insFirst(const T& elem);
-	void insLast(const T& elem);
+	virtual void insLast(const T& elem);
 	virtual void insCurrent(const T& elem);
 
 	void Reset() {
@@ -87,41 +87,65 @@ void TList<T>::setPos(const int _pos) {
 
 template <class T>
 void TList<T>::insFirst(const T& elem) {
-	TLink<T> *tmp = new TLink<T>;
+	/*TLink<T> *tmp = new TLink<T>;
 	tmp->val = elem;
 	tmp->pNext = pFirst;
 	if (pFirst == pStop) {
 		pFirst = pLast = pCurr = tmp;
-		//pFirst = pLast = pPrev = pCurr = tmp;
 		pos = 0;
 	}
 	else {
 		pFirst = tmp;
 		pos++;
 	}
+	size++;*/
+
+	TLink<T> *tmp = new TLink <T>;
+	tmp->val = elem;
+	if (pFirst == NULL)
+	{
+		pFirst = pLast = pCurr = tmp;
+		pFirst->pNext = pStop;
+		pos = 0;
+	}
+	else {
+		tmp->pNext = pFirst;
+		pFirst = tmp;
+	}
+	pos++;
 	size++;
 }
 
 template <class T>
 void TList<T>::insLast(const T& elem) {
-	TLink<T> *tmp = new TLink<T>;
+	/*TLink<T> *tmp = new TLink<T>;
 	tmp->val = elem;
 	tmp->pNext = pStop;
 	if (pFirst == pStop) {
 		pFirst = pLast = pCurr = tmp;
-		//pFirst = pLast = pPrev = pCurr = tmp;
 		pos = 0;
 	}
 	else {
 		pLast->pNext = tmp;
 		pLast = tmp;
 	}
-	size++;
+	size++;*/
+
+	if (pFirst == NULL)
+		insFirst(elem);
+	else {
+		TLink<T> *tmp = new TLink<T>;
+		tmp->val = elem;
+		pLast->pNext = tmp;
+		tmp->pNext = pStop;
+		pLast = tmp;
+		size++;
+	}
 }
 
 template <class T>
 void TList<T>::insCurrent(const T& elem) {
-	if (pCurr == pFirst) {
+	/*if (pCurr == pFirst) {
 		insFirst(elem);
 	}
 	else if (pCurr == pStop) {
@@ -134,12 +158,27 @@ void TList<T>::insCurrent(const T& elem) {
 		pPrev->pNext = tmp;
 		pCurr = tmp;
 		size++;
+	}*/
+
+	if (elem>pFirst->val)
+		insFirst(elem);
+	else {
+		if (pCurr == pStop)
+			insLast(elem);
+		else {
+			TLink<T> *tmp = new TLink<T>;
+			tmp->val = elem;
+			tmp->pNext = pCurr;
+			pPrev->pNext = tmp;
+			pCurr = tmp;
+			size++;
+		}
 	}
 }
 
 template <class T>
 void TList<T>::DelFirst() {
-	if (size == 1) {
+	/*if (size == 1) {
 		delete pFirst;
 		pFirst = pLast = pCurr = pPrev = pStop;
 		pos = -1;
@@ -150,12 +189,26 @@ void TList<T>::DelFirst() {
 		delete tmp;
 		pos--;
 	}
+	size--;*/
+
+	if (size == 1) {
+		delete pFirst;
+		pFirst = pLast = pCurr = pPrev = NULL;
+	}
+	else {
+		TLink<T> *tmp = pFirst;
+		pFirst = pFirst->pNext;
+		delete tmp;
+		pCurr = pFirst;
+	}
 	size--;
+	if (pos > 0)
+		pos--;
 }
 
 template <class T>
 void TList<T>::DelCurrent() {
-	if (size == 1) {
+	/*if (size == 1) {
 		DelFirst();
 	}
 	else {
@@ -164,12 +217,24 @@ void TList<T>::DelCurrent() {
 		pPrev->pNext = pCurr;
 		delete tmp;
 		size--;
+	}*/
+
+	if (pCurr == pFirst)
+		DelFirst();
+	else
+	{
+		pCurr = pCurr->pNext;
+		delete pPrev->pNext;
+		pPrev->pNext = pCurr;
+		size--;
 	}
+	if (size == 1) pLast = pFirst;
+	if (!size) pFirst = NULL;
 }
 
 template <class T>
 void TList<T>::DelLast() {
-	if (size == 1) {
+	/*if (size == 1) {
 		DelFirst();
 	}
 	else {
@@ -182,6 +247,17 @@ void TList<T>::DelLast() {
 		pLast = pCurr;
 		delete tmp;
 		size--;
+	}*/
+
+	if (pLast == pFirst) 
+		DelFirst();
+	else {
+		for (Reset(); !(pCurr->pNext == pStop); goNext()) {}
+		delete pLast;
+		pLast = pCurr = pPrev;
+		Reset();
+		size--;
+		pos--;
 	}
 }
 
@@ -266,7 +342,7 @@ THeadList<T>::THeadList() : TList() {
 template <class T>
 THeadList<T>::~THeadList() {
 	TList::~TList();
-	delete pHead;
+	delete[] pHead;
 }
 
 template <class T>

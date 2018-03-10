@@ -1,4 +1,6 @@
 #pragma once
+#include "../List lab/TList.h"
+#include "../List lab/Polinom.h"
 
 namespace CppWinForm1 {
 
@@ -15,12 +17,23 @@ namespace CppWinForm1 {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
+
+		TPolinom *p;
+		TPolinom *q;
+		TPolinom *res;
+		int pC, qC;
+
 		MyForm(void)
 		{
 			InitializeComponent();
 			//
 			//TODO: Add the constructor code here
 			//
+			p = new TPolinom[20];
+			q = new TPolinom[20];
+			res = new TPolinom();
+			pC = 0;
+			qC = 0;
 		}
 
 	protected:
@@ -33,18 +46,30 @@ namespace CppWinForm1 {
 			{
 				delete components;
 			}
+
+			delete[] p;
+			delete[] q;
+			delete[] res;
 		}
-	private: System::Windows::Forms::TextBox^  textBox1;
+	private: System::Windows::Forms::TextBox^  textBoxCoeff;
+	private: System::Windows::Forms::NumericUpDown^  numericUpDownX;
+	private: System::Windows::Forms::NumericUpDown^  numericUpDownY;
+	private: System::Windows::Forms::NumericUpDown^  numericUpDownZ;
 	protected:
-	private: System::Windows::Forms::NumericUpDown^  numericUpDown1;
-	private: System::Windows::Forms::NumericUpDown^  numericUpDown2;
-	private: System::Windows::Forms::NumericUpDown^  numericUpDown3;
+
+	protected:
+
+
+
 	private: System::Windows::Forms::Label^  label1;
 	private: System::Windows::Forms::Label^  label2;
 	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::TextBox^  textBox2;
-	private: System::Windows::Forms::TextBox^  textBox3;
-	private: System::Windows::Forms::TextBox^  textBox4;
+	private: System::Windows::Forms::TextBox^  textBoxP;
+	private: System::Windows::Forms::TextBox^  textBoxQ;
+	private: System::Windows::Forms::TextBox^  textBoxRes;
+
+
+
 	private: System::Windows::Forms::Button^  button1;
 	private: System::Windows::Forms::Button^  button2;
 	private: System::Windows::Forms::Button^  button3;
@@ -53,6 +78,7 @@ namespace CppWinForm1 {
 	private: System::Windows::Forms::Button^  button6;
 	private: System::Windows::Forms::Button^  button7;
 	private: System::Windows::Forms::Button^  button8;
+	private: System::Windows::Forms::Button^  button9;
 
 	private:
 		/// <summary>
@@ -67,16 +93,16 @@ namespace CppWinForm1 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->numericUpDown1 = (gcnew System::Windows::Forms::NumericUpDown());
-			this->numericUpDown2 = (gcnew System::Windows::Forms::NumericUpDown());
-			this->numericUpDown3 = (gcnew System::Windows::Forms::NumericUpDown());
+			this->textBoxCoeff = (gcnew System::Windows::Forms::TextBox());
+			this->numericUpDownX = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numericUpDownY = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numericUpDownZ = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxP = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxQ = (gcnew System::Windows::Forms::TextBox());
+			this->textBoxRes = (gcnew System::Windows::Forms::TextBox());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
@@ -85,38 +111,39 @@ namespace CppWinForm1 {
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->BeginInit();
+			this->button9 = (gcnew System::Windows::Forms::Button());
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownX))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownY))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownZ))->BeginInit();
 			this->SuspendLayout();
 			// 
-			// textBox1
+			// textBoxCoeff
 			// 
-			this->textBox1->Location = System::Drawing::Point(23, 42);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(75, 22);
-			this->textBox1->TabIndex = 0;
+			this->textBoxCoeff->Location = System::Drawing::Point(23, 42);
+			this->textBoxCoeff->Name = L"textBoxCoeff";
+			this->textBoxCoeff->Size = System::Drawing::Size(75, 22);
+			this->textBoxCoeff->TabIndex = 0;
 			// 
-			// numericUpDown1
+			// numericUpDownX
 			// 
-			this->numericUpDown1->Location = System::Drawing::Point(144, 42);
-			this->numericUpDown1->Name = L"numericUpDown1";
-			this->numericUpDown1->Size = System::Drawing::Size(75, 22);
-			this->numericUpDown1->TabIndex = 1;
+			this->numericUpDownX->Location = System::Drawing::Point(144, 42);
+			this->numericUpDownX->Name = L"numericUpDownX";
+			this->numericUpDownX->Size = System::Drawing::Size(75, 22);
+			this->numericUpDownX->TabIndex = 1;
 			// 
-			// numericUpDown2
+			// numericUpDownY
 			// 
-			this->numericUpDown2->Location = System::Drawing::Point(266, 42);
-			this->numericUpDown2->Name = L"numericUpDown2";
-			this->numericUpDown2->Size = System::Drawing::Size(75, 22);
-			this->numericUpDown2->TabIndex = 2;
+			this->numericUpDownY->Location = System::Drawing::Point(266, 42);
+			this->numericUpDownY->Name = L"numericUpDownY";
+			this->numericUpDownY->Size = System::Drawing::Size(75, 22);
+			this->numericUpDownY->TabIndex = 2;
 			// 
-			// numericUpDown3
+			// numericUpDownZ
 			// 
-			this->numericUpDown3->Location = System::Drawing::Point(386, 42);
-			this->numericUpDown3->Name = L"numericUpDown3";
-			this->numericUpDown3->Size = System::Drawing::Size(75, 22);
-			this->numericUpDown3->TabIndex = 3;
+			this->numericUpDownZ->Location = System::Drawing::Point(386, 42);
+			this->numericUpDownZ->Name = L"numericUpDownZ";
+			this->numericUpDownZ->Size = System::Drawing::Size(75, 22);
+			this->numericUpDownZ->TabIndex = 3;
 			// 
 			// label1
 			// 
@@ -145,54 +172,56 @@ namespace CppWinForm1 {
 			this->label3->TabIndex = 6;
 			this->label3->Text = L"Y^";
 			// 
-			// textBox2
+			// textBoxP
 			// 
-			this->textBox2->Location = System::Drawing::Point(23, 103);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(438, 22);
-			this->textBox2->TabIndex = 7;
+			this->textBoxP->Location = System::Drawing::Point(23, 103);
+			this->textBoxP->Name = L"textBoxP";
+			this->textBoxP->Size = System::Drawing::Size(438, 22);
+			this->textBoxP->TabIndex = 7;
 			// 
-			// textBox3
+			// textBoxQ
 			// 
-			this->textBox3->Location = System::Drawing::Point(23, 215);
-			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(438, 22);
-			this->textBox3->TabIndex = 8;
+			this->textBoxQ->Location = System::Drawing::Point(23, 215);
+			this->textBoxQ->Name = L"textBoxQ";
+			this->textBoxQ->Size = System::Drawing::Size(438, 22);
+			this->textBoxQ->TabIndex = 8;
 			// 
-			// textBox4
+			// textBoxRes
 			// 
-			this->textBox4->Location = System::Drawing::Point(23, 329);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(438, 22);
-			this->textBox4->TabIndex = 9;
+			this->textBoxRes->Location = System::Drawing::Point(23, 329);
+			this->textBoxRes->Name = L"textBoxRes";
+			this->textBoxRes->Size = System::Drawing::Size(438, 22);
+			this->textBoxRes->TabIndex = 9;
 			// 
 			// button1
 			// 
 			this->button1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button1->Location = System::Drawing::Point(59, 146);
+			this->button1->Location = System::Drawing::Point(64, 263);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(55, 51);
 			this->button1->TabIndex = 10;
 			this->button1->Text = L"+";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
 			// 
 			// button2
 			// 
 			this->button2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button2->Location = System::Drawing::Point(205, 146);
+			this->button2->Location = System::Drawing::Point(214, 263);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(55, 51);
 			this->button2->TabIndex = 11;
 			this->button2->Text = L"-";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
 			// 
 			// button3
 			// 
 			this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button3->Location = System::Drawing::Point(349, 146);
+			this->button3->Location = System::Drawing::Point(350, 263);
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(55, 51);
 			this->button3->TabIndex = 12;
@@ -203,7 +232,7 @@ namespace CppWinForm1 {
 			// 
 			this->button4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button4->Location = System::Drawing::Point(205, 260);
+			this->button4->Location = System::Drawing::Point(672, 313);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(55, 51);
 			this->button4->TabIndex = 13;
@@ -218,6 +247,7 @@ namespace CppWinForm1 {
 			this->button5->TabIndex = 14;
 			this->button5->Text = L"ADD 1";
 			this->button5->UseVisualStyleBackColor = true;
+			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
 			// 
 			// button6
 			// 
@@ -227,6 +257,7 @@ namespace CppWinForm1 {
 			this->button6->TabIndex = 15;
 			this->button6->Text = L"ADD 2";
 			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
 			// 
 			// button7
 			// 
@@ -236,6 +267,7 @@ namespace CppWinForm1 {
 			this->button7->TabIndex = 16;
 			this->button7->Text = L"CLEAR 1";
 			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
 			// 
 			// button8
 			// 
@@ -245,12 +277,26 @@ namespace CppWinForm1 {
 			this->button8->TabIndex = 17;
 			this->button8->Text = L"CLEAR 2";
 			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
+			// button9
+			// 
+			this->button9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->button9->Location = System::Drawing::Point(525, 316);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(75, 48);
+			this->button9->TabIndex = 18;
+			this->button9->Text = L"RANDOM";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &MyForm::button9_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(762, 384);
+			this->Controls->Add(this->button9);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
@@ -259,25 +305,124 @@ namespace CppWinForm1 {
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
-			this->Controls->Add(this->textBox4);
-			this->Controls->Add(this->textBox3);
-			this->Controls->Add(this->textBox2);
+			this->Controls->Add(this->textBoxRes);
+			this->Controls->Add(this->textBoxQ);
+			this->Controls->Add(this->textBoxP);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->label1);
-			this->Controls->Add(this->numericUpDown3);
-			this->Controls->Add(this->numericUpDown2);
-			this->Controls->Add(this->numericUpDown1);
-			this->Controls->Add(this->textBox1);
+			this->Controls->Add(this->numericUpDownZ);
+			this->Controls->Add(this->numericUpDownY);
+			this->Controls->Add(this->numericUpDownX);
+			this->Controls->Add(this->textBoxCoeff);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown1))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown2))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDown3))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownX))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownY))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->numericUpDownZ))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	};
+	private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
+		TMonom tmp;
+		tmp.coeff = Convert::ToDouble(textBoxCoeff->Text);
+		tmp.degX = Convert::ToInt32(numericUpDownX->Text);
+		tmp.degY = Convert::ToInt32(numericUpDownY->Text);
+		tmp.degZ = Convert::ToInt32(numericUpDownZ->Text);
+
+		p[pC].insByOrder(tmp);
+
+		textBoxP->Text = GetStrPolinom(p[pC]);
+	}
+	private: System::Void button6_Click(System::Object^  sender, System::EventArgs^  e) {
+		TMonom tmp;
+
+		tmp.coeff = Convert::ToDouble(textBoxCoeff->Text);
+		tmp.degX = Convert::ToInt32(numericUpDownX->Text);
+		tmp.degY = Convert::ToInt32(numericUpDownY->Text);
+		tmp.degZ = Convert::ToInt32(numericUpDownZ->Text);
+
+		q[pC].insByOrder(tmp);
+
+		textBoxQ->Text = GetStrPolinom(q[pC]);
+}
+
+	private: String^ GetStrPolinom(TPolinom &p) {
+		if (/*p.isEmpty()*/ !p.getSize()) 
+			return "0";
+
+		String^ tmp = "";
+
+		for (p.Reset(); !p.IsEnd(); p.GoNext()) {
+			if (!p.isStart() && p.getCoeff() > 0)
+				tmp += "+";
+
+			if ((p.getCoeff() != 1) || (!p.getX() && !p.getY() && !p.getZ()))
+				tmp += p.getCoeff();
+
+			if (p.getX()) 
+				if (p.getX() > 1) 
+					tmp += "x^" + p.getX();
+			else 
+				tmp += "x";
+
+			if (p.getY()) 
+				if (p.getY() > 1)
+					tmp += "y^" + p.getY();
+			else 
+				tmp += "y";
+
+			if (p.getZ())
+				if (p.getZ() > 1)
+					tmp += "z^" + p.getZ();
+			else 
+				tmp += "z";
+		}
+
+		return tmp;
+	}
+
+	private: System::Void button9_Click(System::Object^  sender, System::EventArgs^  e) {
+		Random rand;
+
+		textBoxCoeff->Text = Convert::ToString(rand.Next(100) - 50);
+		numericUpDownX->Text = Convert::ToString(rand.Next(9));
+		numericUpDownY->Text = Convert::ToString(rand.Next(9));
+		numericUpDownZ->Text = Convert::ToString(rand.Next(9));
+	}
+
+
+	private: System::Void button7_Click(System::Object^  sender, System::EventArgs^  e) {
+		pC++;
+		textBoxP->Text = GetStrPolinom(p[pC]);
+	}
+
+
+	private: System::Void button8_Click(System::Object^  sender, System::EventArgs^  e) {
+		qC++;
+		textBoxQ->Text = GetStrPolinom(q[qC]);
+	}
+
+	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+		//*res = p[pC] + q[qC];
+		*res += p[pC];
+		*res += q[qC];
+		//sum(p[pC], q[qC], res);
+		textBoxRes->Text = GetStrPolinom(*res);
+
+		while (!res->isEmpty())
+			res->DelFirst();
+	}
+private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+	*res += p[pC];
+	*res -= q[qC];
+
+	textBoxRes->Text = GetStrPolinom(*res);
+
+	while (!res->isEmpty())
+		res->DelFirst();
+}
+};
 }

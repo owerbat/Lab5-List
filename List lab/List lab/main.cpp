@@ -1,88 +1,45 @@
 #include <time.h>
 #include "Polinom.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 int main() {
-	/*cout << "Count of elements: ";
-	int count = 0;
-	cin >> count;
+	TMonom *m = new TMonom[1], *n = new TMonom[1];
 
-	TList<int> list;
+	m[0].coeff = 2;
+	m[0].degX = 1;
+	m[0].degY = m[0].degZ = 0;
 
-	cout << "Enter elements" << endl;
+	n[0].coeff = 1;
+	n[0].degX = 2;
+	n[0].degY = n[0].degZ = 0;
 
-	int FirstEl;
-	cin >> FirstEl;
+	cout << "m = " << m[0] << "\nn = " << n[0] << endl;
 
-	list.insFirst(FirstEl);
+	TPolinom p(m, 1), q(n, 1);
 
-	for (int i = 1; i < count; i++) {
-		list.Reset();
-		int tmp;
-		cin >> tmp;
-		if (tmp <= list.GetFirst()->val) {
-			list.insFirst(tmp);
-		}
-		else if (tmp >= list.GetLast()->val) {                    //оформить как метод
-			list.insLast(tmp);
-		}
-		else {
-			while (tmp > (list.GetCurr()->val)) {
-				list.GoNext();
-			}
-			list.insCurrent(tmp);
-		}
-	}
+	//TPolinom res = p + q;
+	TPolinom res;
+	/*res += p;
+	res += q;*/
+	sum(p, q, &res);
 
-	cout << "List: ";
-	for (list.Reset(); !list.IsEnd(); list.GoNext()) {
-		cout << list.GetCurr()->val << " ";
-	}
-	cout << endl;*/
+	/*string str = "abc";
+	char *cstr = new char[str.length() + 1];
+	strcpy_s(cstr, str.length() + 1, str.c_str());
+	cout << cstr << endl;*/
 
-	/*
-	srand(time(NULL));
+	//cout << "res = " << res.GetString().c_str() << endl;
 
-	cout << "Count of elements: ";
-	int count = 0;
-	cin >> count;
+	/*string a = "abc";
+	double b = 6.0;
+	a += b;
+	cout << a.c_str() << endl;*/
+	
+	cout << res << endl;
 
-	TList<int> list;
-
-	for (int i = 0; i < count; i++) {
-		list.insFirst(rand() % 100);
-	}
-
-	TList<int> SortList;
-
-	for (SortList.Reset(); !SortList.IsEnd(); SortList.GoNext()) {
-		cout << SortList.GetCurr()->val << " ";
-	}
-	*/
-
-
-	/*TMonom m1;
-	m1.coeff = 2;
-	m1.degX = 7;
-	m1.degY = 3;
-	m1.degZ = 6;
-
-	TMonom m2;
-	m2.coeff = 2;
-	m2.degX = 7;
-	m2.degY = 3;
-	m2.degZ = 6;
-
-	cout << operator>(m1, m2) << endl;*/
-
-	/*try {
-		TMonom res = m1 / m2;
-		cout << res.degX << "; " << res.degY << "; " << res.degZ << "; " << res.coeff << endl;
-	}
-	catch (char *str) {
-		cout << str << endl;
-	}*/
-
-	TPolinom p;
+	delete[] m;
+	delete[] n;
 
 	return 0;
 }
