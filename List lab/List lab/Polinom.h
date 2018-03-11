@@ -1,12 +1,12 @@
 #pragma once
 #include "TList.h"
 
-ostream& operator<<(ostream &out, const string &str) {
+/*ostream& operator<<(ostream &out, const string &str) {
 	for (int i = 0; i < str.size(); i++) {
 		out << (char)(str[i]);
 	}
 	return out;
-}
+}*/
 
 
 
@@ -25,6 +25,7 @@ ostream& operator<<(ostream &out, const string &str) {
 	bool operator<(const TMonom& t1, const TMonom& t2) {
 		if ((&t1 == NULL) || (&t2 == NULL))
 			return false;
+
 		if (t1.degX < t2.degX)
 			return true;
 		else if (t1.degX == t2.degX) {
@@ -44,6 +45,9 @@ ostream& operator<<(ostream &out, const string &str) {
 	}
 
 	bool operator>(const TMonom& t1, const TMonom& t2) {
+		if ((&t1 == NULL) || (&t2 == NULL))
+			return false;
+
 		if (t1.degX > t2.degX)
 			return true;
 		else if (t1.degX == t2.degX) {
@@ -65,6 +69,7 @@ ostream& operator<<(ostream &out, const string &str) {
 	bool operator==(const TMonom& t1, const TMonom& t2) {
 		if ((&t1 == NULL) || (&t2 == NULL))
 			return false;
+
 		if ((t1.degX == t2.degX) && (t1.degY == t2.degY) && (t1.degZ == t2.degZ))
 			return true;
 		else
@@ -171,19 +176,41 @@ public:
 			insLast(m[i]);
 	}
 
+	TPolinom(TPolinom &q) : THeadList<TMonom>() {
+		pHead->val.coeff = 0;
+		pHead->val.degZ = -1;
+
+		for (q.Reset(); !q.IsEnd();q.GoNext()) {
+			insLast(q.pCurr->val);
+		}
+	}
+
+	TPolinom& operator=(TPolinom &q) {
+		while (size) {
+			DelFirst();
+		}
+
+		for (q.Reset(); !q.IsEnd(); q.GoNext()) {
+			insLast(q.pCurr->val);
+		}
+
+		return *this;
+	}
+
 	void insByOrder(const TMonom &m);
 
-	TPolinom operator*(const double a);
+	//TPolinom operator*(const double a);
 	void operator*=(const double a);
 
 	void operator+=(TPolinom &q);
-	TPolinom operator+(TPolinom &q);
+	//TPolinom operator+(TPolinom &q);
 	void operator-=(TPolinom &q);
-	TPolinom operator-(TPolinom &q);
-	TPolinom operator*(TPolinom &q);
+	//TPolinom operator-(TPolinom &q);
+	//TPolinom operator*(TPolinom &q);
 
 	void operator*=(const TMonom &m);
 	TPolinom operator*(const TMonom &m);
+	TPolinom operator*(TPolinom &q);
 
 	
 
@@ -195,66 +222,7 @@ public:
 	int getZ() { return pCurr->val.degZ; }
 	bool isEmpty() { return pFirst == NULL; }
 
-	string GetString() {
-		/*string res;
-		
-		for (Reset(); !IsEnd(); GoNext()) {
-			if (pCurr != pFirst || pCurr->val.coeff >= 0)
-				res += "+";
-			res += pCurr->val.coeff;
-			res += "x^";
-			res += pCurr->val.degX;
-			res += "y^";
-			res += pCurr->val.degY;
-			res += "z^";
-			res += pCurr->val.degZ;
-		}
-
-		return res;*/
-
-		
-		if (isEmpty())
-			return "0";
-
-		string tmp = "";
-
-		for (Reset(); !IsEnd(); GoNext()) {
-			if (!isStart() && getCoeff() > 0)
-				tmp += "+";
-
-			if ((getCoeff() != 1) || (!getX() && !getY() && !getZ()))
-				tmp += getCoeff();
-
-			if (getX())
-				if (getX() > 1) {
-					tmp += "x^";
-					tmp += getX();
-				}
-				else
-					tmp += "x";
-
-			if (getY())
-				if (getY() > 1) {
-					tmp += "y^";
-					tmp += getY();
-				}
-				else
-					tmp += "y";
-
-			if (getZ())
-				if (getZ() > 1) {
-					tmp += "z^";
-					tmp += getZ();
-				}
-				else
-					tmp += "z";
-		}
-
-		return tmp;
-	
-
-	}
-
+	string GetString();
 
 	friend ostream& operator<<(ostream &out, TPolinom &p) {
 		if (p.size) {
@@ -278,10 +246,14 @@ protected:
 
 
 void TPolinom::insByOrder(const TMonom &m) {
+	if (m.coeff == 0)
+		return;
+
 	if (!size) {
 		insFirst(m);
 		return;
 	}
+
 		for (Reset(); !IsEnd(); GoNext()) {
 			if (pCurr->val == m) {
 				pCurr->val.coeff += m.coeff;
@@ -297,12 +269,13 @@ void TPolinom::insByOrder(const TMonom &m) {
 		insLast(m);
 }
 
-TPolinom TPolinom::operator*(const double a) {
+// return TPolinom
+/*TPolinom TPolinom::operator*(const double a) {
 	TPolinom res;
 	for (Reset(); !IsEnd(); GoNext())
 		res.insByOrder(pCurr->val * a);
 	return res;
-}
+}*/
 
 void TPolinom::operator*=(const double a) {
 	for (Reset(); !IsEnd(); GoNext())
@@ -342,38 +315,58 @@ void TPolinom::operator+=(TPolinom &q) {
 		insByOrder(q.pCurr->val);*/
 }
 
-TPolinom TPolinom::operator+(TPolinom &q) {
+// return TPolinom
+/*TPolinom TPolinom::operator+(TPolinom &q) {
 	TPolinom res;
 
 	res += *this;
 	res += q;
 
 	return res;
-}
+}*/
 
 void TPolinom::operator-=(TPolinom &q) {
+	if (!q.size)
+		return;
+
 	q *= (-1.0);
 	*this += q;
 	q *= (-1.0);
 }
 
-TPolinom TPolinom::operator-(TPolinom &q) {
+// return TPolinom
+/*TPolinom TPolinom::operator-(TPolinom &q) {
 	return *this + (q * (-1));
-}
+}*/
 
 void TPolinom::operator*=(const TMonom &m) {
 	for (Reset(); !IsEnd(); GoNext())
 		pCurr->val = pCurr->val * m;
 }
 
-TPolinom TPolinom::operator*(const TMonom &m) {
-	TPolinom res;
-	for (Reset(); !IsEnd(); GoNext())
-		res.insByOrder(pCurr->val * m);
-	return res;
+TPolinom TPolinom::operator*(TPolinom &q) {
+	TPolinom *res = new TPolinom();
+	
+	for (q.Reset(); !q.IsEnd(); q.GoNext()) {
+		TPolinom tmp = *this;
+		*res += tmp * q.pCurr->val;
+	}
+
+	return *res;
 }
 
-TPolinom TPolinom::operator*(TPolinom &q) {
+// return TPolinom
+TPolinom TPolinom::operator*(const TMonom &m) {
+	TPolinom *res = new TPolinom();
+
+	for (Reset(); !IsEnd(); GoNext())
+		res->insByOrder(pCurr->val * m);
+
+	return *res;
+}
+
+// return TPolinom
+/*TPolinom TPolinom::operator*(TPolinom &q) {
 	TPolinom res;
 	for (Reset(); !IsEnd(); GoNext()) {
 		for (q.Reset(); !q.IsEnd(); q.GoNext()) {
@@ -382,7 +375,7 @@ TPolinom TPolinom::operator*(TPolinom &q) {
 		}
 	}
 	return res;
-}
+}*/
 
 void TPolinom::NormalView() {
 	TPolinom q;
@@ -404,4 +397,49 @@ void TPolinom::NormalView() {
 void sum(TPolinom p, TPolinom q, TPolinom *res) {
 	*res += p;
 	*res += q;
+}
+
+
+
+
+string TPolinom::GetString() {
+	if (isEmpty())
+		return "0";
+
+	string tmp = "";
+
+	for (Reset(); !IsEnd(); GoNext()) {
+		if (!isStart() && getCoeff() > 0)
+			tmp += "+";
+
+		if ((getCoeff() != 1) || (!getX() && !getY() && !getZ()))
+			tmp += getCoeff();
+
+		if (getX())
+			if (getX() > 1) {
+				tmp += "x^";
+				tmp += getX();
+			}
+			else
+				tmp += "x";
+
+		if (getY())
+			if (getY() > 1) {
+				tmp += "y^";
+				tmp += getY();
+			}
+			else
+				tmp += "y";
+
+		if (getZ())
+			if (getZ() > 1) {
+				tmp += "z^";
+				tmp += getZ();
+			}
+			else
+				tmp += "z";
+		
+	}
+
+	return tmp;
 }

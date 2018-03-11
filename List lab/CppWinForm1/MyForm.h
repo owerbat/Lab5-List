@@ -123,6 +123,7 @@ namespace CppWinForm1 {
 			this->textBoxCoeff->Name = L"textBoxCoeff";
 			this->textBoxCoeff->Size = System::Drawing::Size(75, 22);
 			this->textBoxCoeff->TabIndex = 0;
+			this->textBoxCoeff->Text = L"0";
 			// 
 			// numericUpDownX
 			// 
@@ -227,6 +228,7 @@ namespace CppWinForm1 {
 			this->button3->TabIndex = 12;
 			this->button3->Text = L"*";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
 			// button4
 			// 
@@ -357,7 +359,7 @@ namespace CppWinForm1 {
 
 		for (p.Reset(); !p.IsEnd(); p.GoNext()) {
 			if (!p.isStart() && p.getCoeff() > 0)
-				tmp += "+";
+				tmp += " + ";
 
 			if ((p.getCoeff() != 1) || (!p.getX() && !p.getY() && !p.getZ()))
 				tmp += p.getCoeff();
@@ -406,23 +408,31 @@ namespace CppWinForm1 {
 	}
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-		//*res = p[pC] + q[qC];
 		*res += p[pC];
 		*res += q[qC];
-		//sum(p[pC], q[qC], res);
 		textBoxRes->Text = GetStrPolinom(*res);
 
 		while (!res->isEmpty())
 			res->DelFirst();
 	}
-private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
-	*res += p[pC];
-	*res -= q[qC];
 
-	textBoxRes->Text = GetStrPolinom(*res);
+	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+		*res += p[pC];
+		*res -= q[qC];
 
-	while (!res->isEmpty())
-		res->DelFirst();
-}
+		textBoxRes->Text = GetStrPolinom(*res);
+
+		while (!res->isEmpty())
+			res->DelFirst();
+	}
+
+	private: System::Void button3_Click(System::Object^  sender, System::EventArgs^  e) {
+		*res = p[pC] * q[qC];
+
+		textBoxRes->Text = GetStrPolinom(*res);
+
+		while (!res->isEmpty())
+			res->DelFirst();
+	}
 };
 }

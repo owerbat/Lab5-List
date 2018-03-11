@@ -72,15 +72,12 @@ TList<T>::TList() {
 
 template <class T>
 TList<T>::~TList() {
-	// for(...) delFirst()
-	//for (Reset(); !IsEnd(); GoNext())
-	while(size != 0)
+	while (size)
 		DelFirst();
 }
 
 template <class T>
 void TList<T>::setPos(const int _pos) {
-	// for(...) GoNext()
 	for (int i = 0; i < _pos; i++)
 		GoNext();
 }
@@ -193,7 +190,7 @@ void TList<T>::DelFirst() {
 
 	if (size == 1) {
 		delete pFirst;
-		pFirst = pLast = pCurr = pPrev = NULL;
+		pFirst = pLast = pCurr = pPrev = pStop = NULL;
 	}
 	else {
 		TLink<T> *tmp = pFirst;
@@ -341,7 +338,7 @@ THeadList<T>::THeadList() : TList() {
 
 template <class T>
 THeadList<T>::~THeadList() {
-	TList::~TList();
+	TList<T>::~TList();
 	delete[] pHead;
 }
 
